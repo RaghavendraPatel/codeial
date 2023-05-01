@@ -1,10 +1,21 @@
 const express = require('express');
 const app = express();
 const port = 8000;
+const expressLayouts = require('express-ejs-layouts');
 
+app.use(expressLayouts);
 //use express router
 app.use('/',require('./routes'));
 
+app.set('view engine','ejs');
+app.set('views','./views')
+
+app.use(express.static('./assets'));
+//extarct and style and scripts from sub pages into the layout
+app.set('layout extractStyles',true);
+app.set('layout extractScripts',true);
+
+const db = require('./config/mongoose');
 app.listen(port,(err)=>{
     if(err){
         console.log(`Error creating server:${err}`);

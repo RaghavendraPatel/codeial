@@ -1,3 +1,3 @@
 module.exports.home = (rea,res)=>{
-    return res.end('Express is up for codeial');
+    return res.render('home');
 }
