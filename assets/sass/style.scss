@@ -1,0 +1,10 @@
+
+$font-stack: Helvetica, sans-serif;
+$primary-color: rgb(255, 255, 255);
+$back-color : black;
+
+body {
+  font: 100% $font-stack;
+  color: $primary-color;
+  background-color: $back-color;
+}
