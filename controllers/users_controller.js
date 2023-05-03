@@ -2,9 +2,25 @@ const User = require('../models/user');
 const md5 = require('md5');
 
 module.exports.profile = (req,res)=>{
-    return res.render('user_profile',{
-        title:'User Profile'
-    });
+    if(req.cookies.user_id){
+        User.findById(req.cookies.user_id)
+        .then((user)=>{
+            if(user){
+                return res.render('user_profile',{
+                    title:'User Profile',
+                    user:user,
+                });
+            }
+            return res.redirect('/users/sign-in');
+        })
+        .catch((err)=>{
+            console.log(err);
+            return res.redirect('/users/sign-in');
+        })
+    }
+    else{
+        return res.redirect('/users/sign-in');
+    }
 }
 
 module.exports.signUp = (req,res)=>{
@@ -54,7 +70,6 @@ module.exports.createSession = (req,res)=>{
     //find the user
     User.findOne({email:req.body.email})
     .then((user)=>{
-
         //handle user found
         if(user){
             //handle incorrect password
@@ -70,5 +85,9 @@ module.exports.createSession = (req,res)=>{
             return res.redirect('back');
         }
     })
+}
 
+module.exports.signOut = (req,res)=>{
+    res.cookie('user_id','').redirect('/users/sign-in');
+    // return res.redirect('/users/sign-in');
 }
