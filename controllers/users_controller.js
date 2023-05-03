@@ -1,4 +1,5 @@
 const User = require('../models/user');
+const md5 = require('md5');
 
 module.exports.profile = (req,res)=>{
     return res.render('user_profile',{
@@ -26,7 +27,11 @@ module.exports.create = (req,res)=>{
     User.findOne({email:req.body.email})
     .then((user)=>{
         if(!user){
-            User.create(req.body)
+            User.create({
+                name:req.body.name,
+                email:req.body.email,
+                password:md5(req.body.password),
+            })
             .then(()=>{
                 return res.redirect('/users/sign-in')
             })
@@ -45,5 +50,25 @@ module.exports.create = (req,res)=>{
 
 //sign in and create session for user
 module.exports.createSession = (req,res)=>{
+    //steps to authenticate
+    //find the user
+    User.findOne({email:req.body.email})
+    .then((user)=>{
+
+        //handle user found
+        if(user){
+            //handle incorrect password
+            if(user.password!=md5(req.body.password)){
+                return res.redirect('back');
+            }
+            //handle session creation
+            res.cookie('user_id',user.id);
+            return res.redirect('/users/profile');
+        }
+        else{
+            //handle user not found
+            return res.redirect('back');
+        }
+    })
 
 }
