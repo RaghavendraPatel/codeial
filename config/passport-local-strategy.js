@@ -42,7 +42,7 @@ passport.deserializeUser((id,done)=>{
 
 //check if user is authenticated
 passport.checkAuthentication = (req,res,next)=>{
-    //if the user is sigbed in the pass on the request to next function
+    //if the user is signed in the pass on the request to next function
     if(req.isAuthenticated()){
         return next();
     }

@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start":"npm-run-all --parallel watch-code watch-sass",
+    "start":"nodemon index.js",
+    "start1":"npm-run-all --parallel watch-code watch-sass",
     "watch-sass": "nodemon -e scss -x \" npm run build-sass\"",
     "watch-code": "nodemon index.js",
     "build-sass": "sass --no-source-map assets/sass:assets/css",
