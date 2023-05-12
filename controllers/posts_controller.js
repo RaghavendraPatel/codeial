@@ -16,20 +16,16 @@ module.exports.create = (req,res)=>{
     });
 }
 
-module.exports.destroy = (req,res)=>{
-    Post.findById(req.params.id)
-    .then((post)=>{
+module.exports.destroy = async (req,res)=>{
+    try{
+        let post = await Post.findById(req.params.id)
         if(post.user == req.user.id){
-            Post.findByIdAndDelete(req.params.id)
-            .then(()=>{
-                Comment.deleteMany({post:req.params.id})
-                .then(()=>{
-                    return res.redirect('back');
-                })
-            })
+            await Post.findByIdAndDelete(req.params.id)
+            await Comment.deleteMany({post:req.params.id})
         }
-        else{
-            return res.redirect('back');
-        }
-    })
+        return res.redirect('back');
+    }
+    catch(err){
+        console.log("Error",err)
+    }
 }

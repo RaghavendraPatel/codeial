@@ -1,10 +1,24 @@
 const User = require('../models/user');
 module.exports.profile = (req,res)=>{
-    return res.render('user_profile',{
-        title:'User Profile'
+    User.findById(req.params.id)
+    .then((user)=>{
+        return res.render('user_profile',{
+            title:'User Profile',
+            profile_user:user
+        });
     });
 }
 
+module.exports.update = (req,res)=>{
+    if(req.user.id==req.params.id){
+        User.findByIdAndUpdate(req.params.id,req.body)
+        .then(()=>{
+            return res.redirect('back');
+        })
+    }else{
+        return res.status(401).send('Unauthorized');
+    }
+}
 module.exports.signUp = (req,res)=>{
     if(req.isAuthenticated()){
         console.log('Already signed in');
@@ -26,28 +40,23 @@ module.exports.signIn = (req,res)=>{
 }
 
 //get the signup data
-module.exports.create = (req,res)=>{
-    if(req.body.password!=req.body.confirm_password){
-        return res.redirect('back');
-    }
-    User.findOne({email:req.body.email})
-    .then((user)=>{
+module.exports.create = async (req,res)=>{
+    try{
+        if(req.body.password!=req.body.confirm_password){
+            return res.redirect('back');
+        }
+        let user = await User.findOne({email:req.body.email});
         if(!user){
-            User.create(req.body)
-            .then(()=>{
-                return res.redirect('/users/sign-in')
-            })
-            .catch((err)=>{
-                console.log(err);
-            });
+            await User.create(req.body);
+            return res.redirect('/users/sign-in')
         }
         else{
             return res.redirect('back');
         }
-    })
-    .catch((err)=>{
+    }
+    catch(err){
         console.log('Error in finding user',err)
-    })
+    }
 }
 
 //sign in and create session for user
