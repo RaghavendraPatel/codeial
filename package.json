@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start":"nodemon index.js",
-    "start1":"npm-run-all --parallel watch-code watch-sass",
+    "start": "nodemon index.js",
+    "start1": "npm-run-all --parallel watch-code watch-sass",
     "watch-sass": "nodemon -e scss -x \" npm run build-sass\"",
     "watch-code": "nodemon index.js",
     "build-sass": "sass --no-source-map assets/sass:assets/css",
@@ -14,6 +14,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "connect-flash": "^0.1.1",
     "connect-mongo": "^5.0.0",
     "cookie-parser": "^1.4.6",
     "ejs": "^3.1.9",
