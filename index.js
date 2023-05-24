@@ -12,7 +12,7 @@ const MongoStore = require('connect-mongo');
 const flash = require('connect-flash');
 const customMware = require('./config/middleware');
 const multer = require('multer');
-
+const passportGoogle = require('./config/passport-google-oauth2-strategy');
 app.use(express.urlencoded({
     extended:true,
 }));
