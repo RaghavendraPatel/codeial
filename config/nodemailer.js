@@ -7,7 +7,6 @@ let transporter = nodemailer.createTransport({
     service:'gmail',
     host:'smtp.gmail.com',
     port:587,
-    secure:false,
     auth:{
         user:secret['mail-auth'].user,
         pass:secret['mail-auth'].password
@@ -21,7 +20,7 @@ let renderTemplate = (data,relativePath)=>{
         data,
         (err,template)=>{
             if(err){
-                console.log("Errorin rendering  template");
+                console.log("Errorin rendering  template",err);
                 return;
             }
             mailHTML = template;
