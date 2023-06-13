@@ -13,7 +13,7 @@ const commentSchema = new mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId,
         ref:'Post'       
     },
-    like:[
+    likes:[
         {
             type:mongoose.Schema.Types.ObjectId,
             ref:'Like'

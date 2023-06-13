@@ -19,14 +19,18 @@ module.exports.toggleLike = async (req,res)=>{
         let existingLike = await Like.findOne({
             likable : req.query.id,
             onModel : req.query.type,
-            user : req.user._id
+            user : req.user.id
         })
         //if a like already exists then delete it
         if(existingLike){
             likable.likes.pull(existingLike._id);
             likable.save();
-
-            existingLike.remove()
+            await Like.findOneAndDelete({
+                likable : req.query.id,
+                onModel : req.query.type,
+                user : req.user._id
+            });
+            // existingLike.remove()
             deleted = true;
         }else{
             let newLike = await Like.create({
@@ -35,21 +39,22 @@ module.exports.toggleLike = async (req,res)=>{
                 onModel: req.query.type
             })
 
-            likable.likes.push(like._id);
+            likable.likes.push(newLike._id);
             likable.save();
         }
 
-        return res.json({
+        return res.status(200).json({
             message:'Request Successful',
             data:{
                 deleted:deleted,
             }
-        }).stats(200);
+        });
+        // return res.redirect('back')
 
     } catch (error) {
         console.log(error);
-        return res.json({
+        return res.status(500).json({
             message : 'Internal serval error'
-        }).stats(500);
+        });
     }
 }

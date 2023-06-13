@@ -17,7 +17,7 @@ const postSchema = new mongoose.Schema({
         }
     ],
     //includes the array of like ids
-    like:[
+    likes:[
         {
             type:mongoose.Schema.Types.ObjectId,
             ref:'Like'
